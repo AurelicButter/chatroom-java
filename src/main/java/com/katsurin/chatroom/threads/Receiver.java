@@ -1,5 +1,7 @@
 package com.katsurin.chatroom.threads;
 
+import com.katsurin.chatroom.enums.ChatRoomEvents;
+
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.BufferedReader;
@@ -24,14 +26,21 @@ public class Receiver {
             public void run() {
                 try {
                     msg = input.readLine();
+                    boolean continueFeed = true;
 
-                    while (msg != null && !msg.isEmpty()) {
+                    while (continueFeed && msg != null) {
                         System.out.println(msg);
                         msg = input.readLine();
+
+                        if (!msg.isEmpty()) {
+                            String actual = msg.split("]")[1].trim();
+                            continueFeed = !actual.isEmpty();
+                        } else {
+                            continueFeed = false;
+                        }
                     }
 
                     System.out.println("Client disconnected");
-                    output.close();
                     stopThread();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -46,7 +55,8 @@ public class Receiver {
     }
 
     public void stopThread() {
-        changes.firePropertyChange("disconnectedThread", this.isClosed, true);
+        output.close();
+        changes.firePropertyChange(ChatRoomEvents.DISCONNECTEDTHREAD.toString(), this.isClosed, true);
         this.isClosed = true;
     }
 

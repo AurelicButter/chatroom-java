@@ -1,5 +1,6 @@
 package com.katsurin.chatroom;
 
+import com.katsurin.chatroom.enums.ChatRoomEvents;
 import com.katsurin.chatroom.threads.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -34,7 +35,7 @@ public class Server implements PropertyChangeListener {
     }
 
     public void propertyChange (PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals("disconnectedThread")) {
+        if (evt.getPropertyName().equals(ChatRoomEvents.DISCONNECTEDTHREAD.toString())) {
             try {
                 clientSocket.close();
                 serverSocket.close();
