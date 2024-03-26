@@ -5,12 +5,11 @@ import java.util.Scanner;
 
 public class Sender {
     private Thread thread;
-    private Scanner sc;
+    private Scanner sc = new Scanner(System.in);
     private PrintWriter output;
     private String username;
 
-    public Sender(Scanner sc, PrintWriter output, String username) {
-        this.sc = sc;
+    public Sender(PrintWriter output, String username) {
         this.output = output;
         this.username = username;
 

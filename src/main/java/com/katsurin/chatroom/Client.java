@@ -6,10 +6,8 @@ import com.katsurin.chatroom.threads.*;
 import java.beans.*;
 import java.io.*;
 import java.net.Socket;
-import java.util.Scanner;
 
 public class Client implements PropertyChangeListener {
-    private final Scanner sc = new Scanner(System.in);
     private Socket clientSocket = null;
     private BufferedReader in = null;
     private PrintWriter out = null;
@@ -25,7 +23,7 @@ public class Client implements PropertyChangeListener {
     }
 
     public void onStart() {
-        Sender senderThread = new Sender(sc, out, "Client");
+        Sender senderThread = new Sender(out, "Client");
         senderThread.start();
 
         Receiver receiver = new Receiver(in, out);
@@ -36,7 +34,7 @@ public class Client implements PropertyChangeListener {
 
     public void propertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals(ChatRoomEvents.DISCONNECTEDTHREAD.toString())) {
-            System.out.println("Server unavailable");
+            System.out.println("[System] You have disconnected from the chatroom");
             try {
                 clientSocket.close();
             } catch (IOException e) {

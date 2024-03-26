@@ -40,7 +40,6 @@ public class Receiver {
                         }
                     }
 
-                    System.out.println("Client disconnected");
                     stopThread();
                 } catch (IOException e) {
                     e.printStackTrace();

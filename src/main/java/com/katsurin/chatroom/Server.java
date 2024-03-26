@@ -2,22 +2,20 @@ package com.katsurin.chatroom;
 
 import com.katsurin.chatroom.enums.ChatRoomEvents;
 import com.katsurin.chatroom.threads.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import java.beans.*;
 import java.io.*;
 import java.net.*;
-import java.util.Scanner;
 
 public class Server implements PropertyChangeListener {
-    private final Scanner sc = new Scanner(System.in);
     private ServerSocket serverSocket = null;
     private Socket clientSocket = null;
     private BufferedReader in = null;
     private PrintWriter out = null;
+    private int serverPort = 5000;
 
     public Server () {
         try {
-            serverSocket = new ServerSocket(5000);
+            serverSocket = new ServerSocket(serverPort);
             clientSocket = serverSocket.accept();
             out = new PrintWriter(clientSocket.getOutputStream());
             in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
@@ -27,11 +25,13 @@ public class Server implements PropertyChangeListener {
     }
 
     public void onStart() {
-        Sender senderThread = new Sender(sc, out, "Server");
+        Sender senderThread = new Sender(out, "Server");
         senderThread.start();
 
         Receiver receiver = new Receiver(in, out);
         receiver.startThread(this);
+
+        System.out.println("[System] Launched chatroom server on port " + serverPort);
     }
 
     public void propertyChange (PropertyChangeEvent evt) {
