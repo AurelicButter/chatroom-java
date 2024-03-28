@@ -1,4 +1,4 @@
-package com.katsurin.chatroom;
+package com.katsurin.chatroom.core;
 
 import com.katsurin.chatroom.threads.*;
 import java.io.*;

@@ -1,4 +1,4 @@
-package com.katsurin.chatroom;
+package com.katsurin.chatroom.core;
 
 import com.katsurin.chatroom.threads.*;
 
@@ -46,7 +46,7 @@ public class Client {
                     out.println("[System] " + username + " has disconnected from the room...");
                     break;
                 }
-                out.println("[" + username + "]" + ": " + userInput);
+                out.println("[" + username + "]" + " " + userInput);
             } while (!userInput.equals("exit"));
         } catch (Exception e) {
             System.out.println("Exception occurred in client main: " + e.getStackTrace());
