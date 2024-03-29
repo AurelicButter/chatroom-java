@@ -19,4 +19,12 @@ public class ChatMessage {
     public String printMessage() {
         return "[" + this.username + "] " + this.message;
     }
+
+    @Override
+    public String toString() {
+        return "ChatMessage: { " +
+                "username: " + this.username +
+                ", message: " + this.message +
+                ", isCommand: " + this.isCommand + " }";
+    }
 }

@@ -1,5 +1,6 @@
 package com.katsurin.chatroom.core;
 
+import com.katsurin.chatroom.classes.ChatMessage;
 import com.katsurin.chatroom.threads.*;
 
 import java.io.*;
@@ -33,23 +34,39 @@ public class Client {
     }
 
     public void onStart() {
+        ChatMessage userMsg = null;
         try {
-            String userInput;
-
             new Thread(clientRunner).start();
             System.out.println("[System] Connection established");
             out.println("[System] " + username + " has connected to the room!");
 
             do {
-                userInput = scanner.nextLine();
-                if (userInput.equals("exit")) {
-                    out.println("[System] " + username + " has disconnected from the room...");
-                    break;
+                userMsg = CommandParser.parseInput(username, scanner.nextLine());
+
+                if (userMsg == null) {
+                    continue;
                 }
-                out.println("[" + username + "]" + " " + userInput);
-            } while (!userInput.equals("exit"));
+
+                if (userMsg.isCommand) {
+                    CommandRunner.runCommand(userMsg, out);
+
+                    if (userMsg.message.equals("exit")) {
+                        break;
+                    }
+                } else {
+                    out.println(userMsg.printMessage());
+                }
+            } while (userMsg == null || !userMsg.message.equals("exit"));
         } catch (Exception e) {
-            System.out.println("Exception occurred in client main: " + e.getStackTrace());
+            System.out.println("[Debug] Exception has occurred in client. See error message below for details.");
+
+            if (userMsg == null) {
+                System.out.println("[Debug] User Message is not initialized");
+            } else {
+                System.out.println("[Debug] " + userMsg.toString());
+            }
+
+            e.printStackTrace();
         }
     }
 
