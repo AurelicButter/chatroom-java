@@ -5,7 +5,7 @@ import java.io.PrintWriter;
 public abstract class ChatCommand {
     String description;
 
-    static void run(ChatMessage command, PrintWriter output) {
+    public static void run(ChatMessage command, PrintWriter output) {
         System.out.println(command.message + " has not been implemented yet...");
     }
 }

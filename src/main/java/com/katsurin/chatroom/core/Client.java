@@ -11,7 +11,7 @@ public class Client {
     private Socket socket = null;
     private PrintWriter out = null;
     private String username = "";
-    private ClientSender clientRunner = null;
+    private ClientReceiver clientRunner = null;
     private Scanner scanner = new Scanner(System.in);
 
     public Client(Integer serverPort) {
@@ -23,7 +23,7 @@ public class Client {
         try {
             socket = new Socket("127.0.0.1", serverPort);
             out = new PrintWriter(socket.getOutputStream(), true);
-            clientRunner = new ClientSender(socket);
+            clientRunner = new ClientReceiver(socket);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -37,6 +37,7 @@ public class Client {
         ChatMessage userMsg = null;
         try {
             new Thread(clientRunner).start();
+            CommandRunner.initCommands();
             System.out.println("[System] Connection established");
             out.println("[System] " + username + " has connected to the room!");
 
