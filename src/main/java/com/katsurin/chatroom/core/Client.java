@@ -32,6 +32,7 @@ public class Client {
     public void updateUsername(String username) {
         this.username = username;
     }
+    public String getUsername() { return this.username; }
 
     public void onStart() {
         ChatMessage userMsg = null;
@@ -42,7 +43,7 @@ public class Client {
             out.println("[System] " + username + " has connected to the room!");
 
             do {
-                userMsg = CommandParser.parseInput(username, scanner.nextLine());
+                userMsg = new ChatMessage(this, scanner.nextLine());
 
                 if (userMsg == null) {
                     continue;
@@ -64,7 +65,7 @@ public class Client {
             if (userMsg == null) {
                 System.out.println("[Debug] User Message is not initialized");
             } else {
-                System.out.println("[Debug] " + userMsg.toString());
+                System.out.println("[Debug] " + userMsg);
             }
 
             e.printStackTrace();

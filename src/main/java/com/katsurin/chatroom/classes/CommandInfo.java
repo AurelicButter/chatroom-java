@@ -1,20 +1,18 @@
 package com.katsurin.chatroom.classes;
 
 public class CommandInfo {
-    public String name;
-    public String description;
+    private String name;
+    private String description;
     public Class<ChatCommand> command;
 
-    public CommandInfo(String name, String description) {
+    public CommandInfo(String name, Class command) throws NoSuchFieldException, IllegalAccessException {
         this.name = name;
-        this.description = description;
+        this.command = command;
+        this.description = (String) command.getField("description").get(command);
     }
 
-    public CommandInfo(String name, String description, Class command) {
-        this.name = name;
-        this.description = description;
-        this.command = command;
-    }
+    public String getName() { return this.name; }
+    public String getDescription() { return this.description; }
 
     public String toString() {
         return "/" + this.name.toLowerCase() + ": " + this.description;

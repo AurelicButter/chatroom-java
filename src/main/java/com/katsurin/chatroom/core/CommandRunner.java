@@ -20,7 +20,7 @@ public class CommandRunner {
     }
 
     public static void runCommand(ChatMessage command, PrintWriter output) {
-        CommandInfo target = commandMap.get(command.message);
+        CommandInfo target = commandMap.get(command.commandName);
 
         if (target == null) {
             System.out.println("Client does not recognize that command. Please use /help for a list of possible commands.");
@@ -40,20 +40,14 @@ public class CommandRunner {
     }
 
     private static void getClassInfo(String classname) {
+        classname = classname.substring(0, classname.lastIndexOf("."));
         try {
             Class<ChatCommand> foundClass = (Class<ChatCommand>) Class.forName(
-                    "com.katsurin.chatroom.commands." + classname.substring(0, classname.lastIndexOf("."))
+                    "com.katsurin.chatroom.commands." + classname
             );
 
-            String description = (String) foundClass.getField("description").get(foundClass);
-
-            CommandInfo command = new CommandInfo(
-                    classname.substring(0, classname.lastIndexOf(".")),
-                    description,
-                    foundClass
-            );
-
-            commandMap.put(classname.substring(0, classname.lastIndexOf(".")).toLowerCase(), command);
+            CommandInfo command = new CommandInfo(classname, foundClass);
+            commandMap.put(classname.toLowerCase(), command);
         } catch (ClassNotFoundException e) {
             System.out.println("[Debug] Failed to retrieve class " + classname);
         } catch (NoSuchFieldException e) {
